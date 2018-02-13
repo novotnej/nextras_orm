@@ -396,7 +396,11 @@ abstract class AbstractEntity implements IEntity
 
 	private function internalSetValue(PropertyMetadata $metadata, string $name, $value)
 	{
-		if (!isset($this->validated[$name])) {
+        if (key_exists('array', $metadata->types) && !is_array($value)) {
+              $value = unserialize($value);
+        }
+
+        if (!isset($this->validated[$name])) {
 			$this->initProperty($metadata, $name);
 		}
 

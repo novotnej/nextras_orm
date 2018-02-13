@@ -256,7 +256,14 @@ class DbalMapper extends BaseMapper
 		$data = $this->entityToArray($entity);
 		$data = $this->getStorageReflection()->convertEntityToStorage($data);
 
-		if (!$entity->isPersisted()) {
+        foreach ($data as $key => $value) {
+            if (is_array($value)) {
+                $data[$key] = serialize($value);
+            }
+        }
+
+
+        if (!$entity->isPersisted()) {
 			$this->processInsert($entity, $data);
 			return $entity->hasValue('id')
 				? $entity->getValue('id')
